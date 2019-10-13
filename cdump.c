@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include <unistd.h>
+
+int option_respect_newline;
 
 enum {
    NORMAL,
@@ -112,13 +115,13 @@ out(const char c)
       put(cp);
       break; }
 
-   if (c == '\n') {
+   if (option_respect_newline && c == '\n') {
       class_change(NORMAL);
       putchar(c); }
 }
 
 int
-main(void)
+cdump(void)
 {
    int c;
 
@@ -129,4 +132,27 @@ main(void)
 
    putchar('\n');
    return 0;
+}
+
+void
+parse_option(int argc, char *argv[])
+{
+   int o;
+
+   while (o = getopt(argc, argv, "r"), o != -1)
+      switch (o) {
+      case 'r':
+         option_respect_newline = 1;
+         break;
+      default:
+         fprintf(stderr, "ignoring unknown option <%c>\n", o);
+         break; }
+}
+
+int
+main(int argc, char *argv[])
+{
+   parse_option(argc, argv);
+
+   return cdump();
 }
