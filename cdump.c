@@ -111,6 +111,10 @@ out(const char c)
    default:
       put(cp);
       break; }
+
+   if (c == '\n') {
+      class_change(NORMAL);
+      putchar(c); }
 }
 
 int
@@ -122,6 +126,7 @@ main(void)
       out(c);
 
    class_change(NORMAL);
+
    putchar('\n');
    return 0;
 }
