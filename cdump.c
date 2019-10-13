@@ -5,6 +5,7 @@
 int option_respect_newline;
 int option_debug;
 int option_width;
+int global_bytes;
 int global_col;
 
 enum {
@@ -84,6 +85,12 @@ put(char c)
 }
 
 void
+show_offset(void)
+{
+   printf("%6x  ", global_bytes);
+}
+
+void
 out(const char c)
 {
    const char c7 = c & 0x7f;
@@ -108,17 +115,15 @@ out(const char c)
    default:
       put(c7);  break; }
 
+   global_bytes++;
    global_col++;
 
-   if (option_respect_newline && c == '\n') {
+   if ((option_respect_newline && c == '\n') ||
+       (option_width && global_col == option_width)) {
       class_change(NORMAL);
       global_col = 0;
-      putchar(c); }
-
-   if (option_width && global_col == option_width) {
-      class_change(NORMAL);
-      global_col = 0;
-      putchar('\n'); }
+      putchar('\n');
+      show_offset(); }
 }
 
 int
@@ -157,6 +162,7 @@ int
 main(int argc, char *argv[])
 {
    parse_option(argc, argv);
+   show_offset();
 
    return cdump();
 }
