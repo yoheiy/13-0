@@ -143,9 +143,6 @@ parse_option(int argc, char *argv[])
       switch (o) {
       case 'r':
          option_respect_newline = 1;
-         break;
-      default:
-         fprintf(stderr, "ignoring unknown option <%c>\n", o);
          break; }
 }
 
