@@ -7,9 +7,41 @@ enum {
    META_CTRL,
    META_PRINTABLE };
 
+enum {
+   NONE,
+   RED,
+   GREEN,
+   YELLOW,
+   WHITE };
+
+void
+esc(int colour)
+{
+}
+
 void
 class_change(int cls)
 {
+   static int prev_cls = NORMAL;
+
+   if (cls == prev_cls) return;
+
+   switch (cls) {
+   case NORMAL:
+      esc(NONE);
+      break;
+   case CTRL:
+      esc(RED);
+      break;
+   case PRINTABLE:
+      esc(WHITE);
+      break;
+   case META_CTRL:
+      esc(GREEN);
+      break;
+   case META_PRINTABLE:
+      esc(YELLOW);
+      break; }
 }
 
 void
