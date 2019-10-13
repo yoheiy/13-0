@@ -1,5 +1,11 @@
 #include <stdio.h>
 
+void
+out(char c)
+{
+   putchar(c);
+}
+
 int
 main(void)
 {
@@ -8,16 +14,16 @@ main(void)
    while (c = getchar(), c != EOF)
       switch (c & 0x7f) {
       case 0 ... 31:
-         putchar(c + '@');
+         out(c + '@');
          break;
       case 32:
-         putchar('.');
+         out('.');
          break;
       case 127:
-         putchar('?');
+         out('?');
          break;
       default:
-         putchar(c);
+         out(c);
          break; }
 
    putchar('\n');
