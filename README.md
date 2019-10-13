@@ -1,6 +1,6 @@
 # NAME
 
-cdump - dump program which displays characters with differnt colours
+cdump - a dump program which displays characters with different colours
 
 # SYNOPSIS
 
@@ -9,7 +9,7 @@ cdump - dump program which displays characters with differnt colours
 # DESCRIPTION
 
 `cdump` reads standard input and displays it with colours.
-It always show one byte with one coloured character.
+It always shows one byte with one coloured character.
 
 # OPTIONS
 
