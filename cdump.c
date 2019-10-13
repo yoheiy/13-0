@@ -15,8 +15,28 @@ enum {
    WHITE };
 
 void
+esc_out(int n)
+{
+   if (n)
+      printf("\033[%d;40m", n);
+   else
+      printf("\033[0m");
+}
+
+void
 esc(int colour)
 {
+   switch (colour) {
+   case NONE:
+      esc_out(0);  break;
+   case RED:
+      esc_out(31); break;
+   case GREEN:
+      esc_out(32); break;
+   case YELLOW:
+      esc_out(33); break;
+   case WHITE:
+      esc_out(37); break; }
 }
 
 void
@@ -25,6 +45,19 @@ class_change(int cls)
    static int prev_cls = NORMAL;
 
    if (cls == prev_cls) return;
+   prev_cls = cls;
+
+#if 0
+   // DEBUG
+#define SHOW_CLASS(x) case x: printf("{%s}", #x); break;
+   switch (cls) {
+   SHOW_CLASS(NORMAL);
+   SHOW_CLASS(CTRL);
+   SHOW_CLASS(PRINTABLE);
+   SHOW_CLASS(META_CTRL);
+   SHOW_CLASS(META_PRINTABLE); };
+   return;
+#endif
 
    switch (cls) {
    case NORMAL:
