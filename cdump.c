@@ -84,27 +84,27 @@ put(char c)
 void
 out(const char c)
 {
-   const char cp = c & 0x7f;
-   const char cm = c & 0x80;
+   const char c7 = c & 0x7f;
+   const char c8 = c & 0x80;
 
-   switch (cp) {
+   switch (c7) {
    case 0 ... 32:
    case 127:
-      class_change(cm ? META_CTRL : CTRL);
+      class_change(c8 ? META_CTRL : CTRL);
       break;
    default:
-      class_change(cm ? META_PRINTABLE : PRINTABLE);
+      class_change(c8 ? META_PRINTABLE : PRINTABLE);
       break; }
 
-   switch (cp) {
+   switch (c7) {
    case 0 ... 31:
-      put(cp + '@'); break;
+      put(c7 + '@'); break;
    case 32:
       put('.'); break;
    case 127:
       put('?'); break;
    default:
-      put(cp);  break; }
+      put(c7);  break; }
 
    if (option_respect_newline && c == '\n') {
       class_change(NORMAL);
