@@ -116,6 +116,7 @@ out(const char c)
       putchar(c); }
 
    if (option_width && global_col == option_width) {
+      class_change(NORMAL);
       global_col = 0;
       putchar('\n'); }
 }
