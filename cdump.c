@@ -64,20 +64,15 @@ class_change(int cls)
 
    switch (cls) {
    case NORMAL:
-      esc(NONE);
-      break;
+      esc(NONE);   break;
    case CTRL:
-      esc(RED);
-      break;
+      esc(RED);    break;
    case PRINTABLE:
-      esc(WHITE);
-      break;
+      esc(WHITE);  break;
    case META_CTRL:
-      esc(GREEN);
-      break;
+      esc(GREEN);  break;
    case META_PRINTABLE:
-      esc(YELLOW);
-      break; }
+      esc(YELLOW); break; }
 }
 
 void
@@ -103,17 +98,13 @@ out(const char c)
 
    switch (cp) {
    case 0 ... 31:
-      put(cp + '@');
-      break;
+      put(cp + '@'); break;
    case 32:
-      put('.');
-      break;
+      put('.'); break;
    case 127:
-      put('?');
-      break;
+      put('?'); break;
    default:
-      put(cp);
-      break; }
+      put(cp);  break; }
 
    if (option_respect_newline && c == '\n') {
       class_change(NORMAL);
