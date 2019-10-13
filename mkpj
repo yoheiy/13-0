@@ -1,0 +1,19 @@
+#!/bin/sh
+
+usage() {
+   echo mkpj: usage
+   echo \$ mkpj project-name
+   exit 0
+}
+
+[ $# = 1 ] || usage
+
+touch "$1.c"
+cat >Makefile << EOF
+o = $1
+
+all: \$o
+
+clean:
+	\$(RM) \$o *.o
+EOF
