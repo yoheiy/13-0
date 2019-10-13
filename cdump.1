@@ -1,0 +1,42 @@
+.TH cdump 1
+.SH NAME
+cdump \- a dump program which displays characters with different colours
+.SH SYNOPSIS
+.B cdump
+.RI [ options ]
+.RI < file
+.SH DESCRIPTION
+.B cdump
+reads standard input and displays it with colours.
+Unlike
+.BR hexdump (1)
+and
+.BR od (1)
+which show bytes in hex or octal format,
+.B cdump
+always shows one byte with one coloured character.
+Red: control characters ;
+White: printable characters ;
+Green: control characters with meta bit (bit 7) ;
+Yellow: printable characters with meta bit.
+.SH OPTIONS
+.TP
+.B \-r
+respect newline in input stream
+.TP
+.B \-d
+debug mode
+.TP
+\fB\-w\fR \fIwidth\fR
+wrap at
+.I width
+characters
+.PP
+.B cdump
+ignores unknown options.
+.SH EXIT STATUS
+.B cdump
+always returns with exit status zero.
+.SH SEE ALSO
+.BR hexdump (1),
+.BR od (1)
