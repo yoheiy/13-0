@@ -2,6 +2,7 @@
 #include <unistd.h>
 
 int option_respect_newline;
+int option_debug;
 
 enum {
    NORMAL,
@@ -50,17 +51,15 @@ class_change(int cls)
    if (cls == prev_cls) return;
    prev_cls = cls;
 
-#if 0
-   // DEBUG
+   if (option_debug) { // DEBUG
 #define SHOW_CLASS(x) case x: printf("{%s}", #x); break;
-   switch (cls) {
-   SHOW_CLASS(NORMAL);
-   SHOW_CLASS(CTRL);
-   SHOW_CLASS(PRINTABLE);
-   SHOW_CLASS(META_CTRL);
-   SHOW_CLASS(META_PRINTABLE); };
-   return;
-#endif
+      switch (cls) {
+         SHOW_CLASS(NORMAL);
+         SHOW_CLASS(CTRL);
+         SHOW_CLASS(PRINTABLE);
+         SHOW_CLASS(META_CTRL);
+         SHOW_CLASS(META_PRINTABLE); };
+      return; }
 
    switch (cls) {
    case NORMAL:
@@ -130,8 +129,11 @@ parse_option(int argc, char *argv[])
 {
    int o;
 
-   while (o = getopt(argc, argv, "r"), o != -1)
+   while (o = getopt(argc, argv, "dr"), o != -1)
       switch (o) {
+      case 'd':
+         option_debug = 1;
+         break;
       case 'r':
          option_respect_newline = 1;
          break; }
