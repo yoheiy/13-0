@@ -8,11 +8,12 @@ put(char c)
 }
 
 void
-out(char c)
+out(const char c)
 {
-   switch (c & 0x7f) {
+   const char cp = c & 0x7f;
+   switch (cp) {
    case 0 ... 31:
-      put(c + '@');
+      put(cp + '@');
       break;
    case 32:
       put('.');
@@ -21,7 +22,7 @@ out(char c)
       put('?');
       break;
    default:
-      put(c);
+      put(cp);
       break; }
 }
 
