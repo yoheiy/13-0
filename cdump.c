@@ -5,6 +5,7 @@
 int option_respect_newline;
 int option_debug;
 int option_width;
+int option_html;
 int global_bytes;
 int global_col;
 
@@ -48,12 +49,40 @@ esc(int colour)
 }
 
 void
+html(int cls)
+{
+   const char *s;
+
+   switch (cls) {
+   case CTRL:
+      s = "ctrl";
+      break;
+   case PRINTABLE:
+      s = "printable";
+      break;
+   case META_CTRL:
+      s = "metactrl";
+      break;
+   case META_PRINTABLE:
+      s = "metaprintable";
+      break;
+   default:
+      return; }
+   printf("<span class='%s'>", s);
+}
+
+void
+html_close(void)
+{
+   fputs("</span>", stdout);
+}
+
+void
 class_change(int cls)
 {
    static int prev_cls = NORMAL;
 
    if (cls == prev_cls) return;
-   prev_cls = cls;
 
    if (option_debug) { // DEBUG
 #define SHOW_CLASS(x) case x: printf("{%s}", #x); break;
@@ -65,23 +94,48 @@ class_change(int cls)
          SHOW_CLASS(META_PRINTABLE); };
       return; }
 
-   switch (cls) {
-   case NORMAL:
-      esc(NONE);   break;
-   case CTRL:
-      esc(RED);    break;
-   case PRINTABLE:
-      esc(WHITE);  break;
-   case META_CTRL:
-      esc(GREEN);  break;
-   case META_PRINTABLE:
-      esc(YELLOW); break; }
+   if (option_html) {
+      if (prev_cls != NORMAL)
+         html_close();
+      html(cls); }
+   else
+      switch (cls) {
+      case NORMAL:
+         esc(NONE);   break;
+      case CTRL:
+         esc(RED);    break;
+      case PRINTABLE:
+         esc(WHITE);  break;
+      case META_CTRL:
+         esc(GREEN);  break;
+      case META_PRINTABLE:
+         esc(YELLOW); break; }
+
+   prev_cls = cls;
 }
 
 void
 put(char c)
 {
-   putchar(c);
+   if (option_html)
+      switch (c) {
+      case '&':
+         fputs("&amp;", stdout);
+         break;
+      case '<':
+         fputs("&lt;", stdout);
+         break;
+      case '>':
+         fputs("&gt;", stdout);
+         break;
+      case '\n':
+         fputs("<br>", stdout);
+         break;
+      default:
+         putchar(c);
+         break; }
+   else
+      putchar(c);
 }
 
 void
@@ -122,7 +176,7 @@ out(const char c)
        (option_width && global_col == option_width)) {
       class_change(NORMAL);
       global_col = 0;
-      putchar('\n');
+      put('\n');
       show_offset(); }
 }
 
@@ -145,10 +199,13 @@ parse_option(int argc, char *argv[])
 {
    int o;
 
-   while (o = getopt(argc, argv, "drw:"), o != -1)
+   while (o = getopt(argc, argv, "dhrw:"), o != -1)
       switch (o) {
       case 'd':
          option_debug = 1;
+         break;
+      case 'h':
+         option_html = 1;
          break;
       case 'r':
          option_respect_newline = 1;
