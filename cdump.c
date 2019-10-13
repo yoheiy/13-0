@@ -1,8 +1,11 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 
 int option_respect_newline;
 int option_debug;
+int option_width;
+int global_col;
 
 enum {
    NORMAL,
@@ -105,9 +108,16 @@ out(const char c)
    default:
       put(c7);  break; }
 
+   global_col++;
+
    if (option_respect_newline && c == '\n') {
       class_change(NORMAL);
+      global_col = 0;
       putchar(c); }
+
+   if (option_width && global_col == option_width) {
+      global_col = 0;
+      putchar('\n'); }
 }
 
 int
@@ -129,13 +139,16 @@ parse_option(int argc, char *argv[])
 {
    int o;
 
-   while (o = getopt(argc, argv, "dr"), o != -1)
+   while (o = getopt(argc, argv, "drw:"), o != -1)
       switch (o) {
       case 'd':
          option_debug = 1;
          break;
       case 'r':
          option_respect_newline = 1;
+         break;
+      case 'w':
+         option_width = atoi(optarg);
          break; }
 }
 

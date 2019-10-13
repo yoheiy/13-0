@@ -14,6 +14,8 @@ It always shows one byte with one coloured character.
 # OPTIONS
 
   - `-r` respect newline
+  - `-d` debug mode
+  - `-w`*width* wrap at *width* chars
 
 # EXIT STATUS
 
