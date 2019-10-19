@@ -2,10 +2,12 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-int option_respect_newline;
 int option_debug;
-int option_width;
 int option_html;
+int option_line_number;
+int option_respect_newline;
+int option_without_offset;
+int option_width;
 int global_bytes;
 int global_col;
 
@@ -141,6 +143,7 @@ put(char c)
 void
 show_offset(void)
 {
+   if (option_without_offset) return;
    printf("%6x  ", global_bytes);
 }
 
@@ -199,13 +202,19 @@ parse_option(int argc, char *argv[])
 {
    int o;
 
-   while (o = getopt(argc, argv, "dhrw:"), o != -1)
+   while (o = getopt(argc, argv, "Wdhlrw:"), o != -1)
       switch (o) {
+      case 'W':
+         option_without_offset = 1;
+         break;
       case 'd':
          option_debug = 1;
          break;
       case 'h':
          option_html = 1;
+         break;
+      case 'l':
+         option_line_number = 1;
          break;
       case 'r':
          option_respect_newline = 1;
