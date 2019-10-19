@@ -10,6 +10,7 @@ int option_without_offset;
 int option_width;
 int global_bytes;
 int global_col;
+int global_line = 1;
 
 enum {
    NORMAL,
@@ -143,8 +144,10 @@ put(char c)
 void
 show_offset(void)
 {
-   if (option_without_offset) return;
-   printf("%6x  ", global_bytes);
+   if (option_line_number)
+      printf("%6d  ", global_line);
+   if (!option_without_offset)
+      printf("%6x  ", global_bytes);
 }
 
 void
@@ -174,6 +177,8 @@ out(const char c)
 
    global_bytes++;
    global_col++;
+   if (c == '\n')
+      global_line++;
 
    if ((option_respect_newline && c == '\n') ||
        (option_width && global_col == option_width)) {
