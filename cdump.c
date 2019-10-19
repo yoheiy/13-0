@@ -121,19 +121,12 @@ void
 put(char c)
 {
    if (option_html)
+#define ENTITY(x, y) case x: fputs(y, stdout); break;
       switch (c) {
-      case '&':
-         fputs("&amp;", stdout);
-         break;
-      case '<':
-         fputs("&lt;", stdout);
-         break;
-      case '>':
-         fputs("&gt;", stdout);
-         break;
-      case '\n':
-         fputs("<br>", stdout);
-         break;
+         ENTITY('&', "&amp;");
+         ENTITY('<', "&lt;");
+         ENTITY('>', "&gt;");
+         ENTITY('\n', "<br>");
       default:
          putchar(c);
          break; }
@@ -197,7 +190,6 @@ cdump(void)
       out(c);
 
    class_change(NORMAL);
-
    putchar('\n');
    return 0;
 }
@@ -208,25 +200,15 @@ parse_option(int argc, char *argv[])
    int o;
 
    while (o = getopt(argc, argv, "Wdhlrw:"), o != -1)
+#define OPTION(x, y) case x: option_ ## y = 1; break;
+#define OPTARG(x, y) case x: option_ ## y = atoi(optarg); break;
       switch (o) {
-      case 'W':
-         option_without_offset = 1;
-         break;
-      case 'd':
-         option_debug = 1;
-         break;
-      case 'h':
-         option_html = 1;
-         break;
-      case 'l':
-         option_line_number = 1;
-         break;
-      case 'r':
-         option_respect_newline = 1;
-         break;
-      case 'w':
-         option_width = atoi(optarg);
-         break; }
+         OPTION('W', without_offset);
+         OPTION('d', debug);
+         OPTION('h', html);
+         OPTION('l', line_number);
+         OPTION('r', respect_newline);
+         OPTARG('w', width); }
 }
 
 int
