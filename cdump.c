@@ -8,6 +8,7 @@ int option_line_number;
 int option_respect_newline;
 int option_without_offset;
 int option_width;
+int option_xpm;
 int global_bytes;
 int global_col;
 int global_line = 1;
@@ -85,6 +86,17 @@ class_change(int cls)
 {
    static int prev_cls = NORMAL;
 
+   if (option_xpm)
+      switch (cls) {
+      case CTRL:
+         putchar('c'); return;
+      case PRINTABLE:
+         putchar('p'); return;
+      case META_CTRL:
+         putchar('C'); return;
+      case META_PRINTABLE:
+         putchar('P'); return; }
+
    if (cls == prev_cls) return;
 
    if (option_debug) { // DEBUG
@@ -101,6 +113,8 @@ class_change(int cls)
       if (prev_cls != NORMAL)
          html_close();
       html(cls); }
+   else if (option_xpm)
+      ;
    else
       switch (cls) {
       case NORMAL:
@@ -130,6 +144,12 @@ put(char c)
       default:
          putchar(c);
          break; }
+   else if (option_xpm) {
+      if (c == '\n') {
+         fputs("\",\n\"", stdout);
+         for (int i = 0; i < option_width; i++)
+            putchar('X');
+         fputs("\",\n\"", stdout); } }
    else
       putchar(c);
 }
@@ -137,6 +157,7 @@ put(char c)
 void
 show_offset(void)
 {
+   if (option_xpm) return;
    if (option_line_number)
       printf("%6d  ", global_line);
    if (!option_without_offset)
@@ -181,16 +202,55 @@ out(const char c)
       show_offset(); }
 }
 
+void
+output_xpm_header(void)
+{
+   fputs("a\n"
+         "/* XPM */\n"
+         "static char *cdump_xpm[] = {\n"
+         "\"X X X X\",\n"
+         "\"c c red\",\n"
+         "\"p c white\",\n"
+         "\"C c green\",\n"
+         "\"P c yellow\",\n"
+         "\"X c None\",\n"
+         "\"", stdout);
+}
+
+void
+output_xpm_footer(void)
+{
+   const int rest = option_width - global_bytes % option_width;
+
+   if (global_bytes % option_width || !global_bytes) {
+      for (int i = 0; i < rest; i++)
+         putchar('X');
+      put('\n'); }
+
+   printf("};\n"
+          ".\n"
+          "3c\n\"%d %d 5 1\",\n.\n"
+          "1,$p\n"
+          "Q\n",
+          option_width,
+          2 * ((global_bytes - 1) / option_width + 1));
+}
+
 int
 cdump(void)
 {
    int c;
 
+   if (option_xpm)
+      output_xpm_header();
    while (c = getchar(), c != EOF)
       out(c);
 
    class_change(NORMAL);
-   putchar('\n');
+   if (option_xpm)
+      output_xpm_footer();
+   else
+      putchar('\n');
    return 0;
 }
 
@@ -199,7 +259,7 @@ parse_option(int argc, char *argv[])
 {
    int o;
 
-   while (o = getopt(argc, argv, "Wdhlrw:"), o != -1)
+   while (o = getopt(argc, argv, "Wdhlrw:x"), o != -1)
 #define OPTION(x, y) case x: option_ ## y = 1; break;
 #define OPTARG(x, y) case x: option_ ## y = atoi(optarg); break;
       switch (o) {
@@ -208,7 +268,13 @@ parse_option(int argc, char *argv[])
          OPTION('h', html);
          OPTION('l', line_number);
          OPTION('r', respect_newline);
+         OPTION('x', xpm);
          OPTARG('w', width); }
+   if (option_html && option_xpm) {
+      option_xpm = 0;
+      fputs("option -x ignored because of -h\n", stderr); }
+   if (option_xpm && !option_width)
+      option_width = 0x100;
 }
 
 int

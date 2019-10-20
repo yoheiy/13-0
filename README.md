@@ -10,6 +10,7 @@ It always shows one byte with one coloured character.
   - `-r` respect newline
   - `-w`*width* wrap at *width* chars
   - `-W` do not show offset column
+  - `-x` output ed script to output xpm image (experimental)
 
 ## example
 
