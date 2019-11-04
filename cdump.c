@@ -182,13 +182,14 @@ out(const char c)
    const char c8 = c & 0x80;
 
    if (option_u8 && c8) {
-      class_change(META_PRINTABLE);
-
       unsigned char x = c;
-      if ((x == 0xc0) || (x == 0xc1) || (x > 0xf4))
-         put('X');
-      else
-         put(u8width(c) + '0');
+
+      if ((x == 0xc0) || (x == 0xc1) || (x > 0xf4)) {
+         class_change(META_PRINTABLE);
+         put('X'); }
+      else {
+         class_change(META_CTRL);
+         put(u8width(c) + '0'); }
       goto u8; }
 
    switch (c7) {
