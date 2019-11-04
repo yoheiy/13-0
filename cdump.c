@@ -9,6 +9,7 @@ int option_respect_newline;
 int option_without_offset;
 int option_width;
 int option_xpm;
+int option_u8;
 int global_bytes;
 int global_col;
 int global_line = 1;
@@ -164,11 +165,23 @@ show_offset(void)
       printf("%6x  ", global_bytes);
 }
 
+int
+u8width(char c)
+{
+   int i = 0;
+
+   for (; c & 0x80; c <<= 1) i++;
+
+   return i;
+}
+
 void
 out(const char c)
 {
    const char c7 = c & 0x7f;
    const char c8 = c & 0x80;
+
+if (option_u8 && c8) { class_change(META_PRINTABLE); put('0' + u8width(c)); goto u8; }
 
    switch (c7) {
    case 0 ... 32:
@@ -188,6 +201,8 @@ out(const char c)
       put('?'); break;
    default:
       put(c7);  break; }
+
+u8:
 
    global_bytes++;
    global_col++;
@@ -259,7 +274,7 @@ parse_option(int argc, char *argv[])
 {
    int o;
 
-   while (o = getopt(argc, argv, "Wdhlrw:x"), o != -1)
+   while (o = getopt(argc, argv, "Wdhlruw:x"), o != -1)
 #define OPTION(x, y) case x: option_ ## y = 1; break;
 #define OPTARG(x, y) case x: option_ ## y = atoi(optarg); break;
       switch (o) {
@@ -268,6 +283,7 @@ parse_option(int argc, char *argv[])
          OPTION('h', html);
          OPTION('l', line_number);
          OPTION('r', respect_newline);
+         OPTION('u', u8);
          OPTION('x', xpm);
          OPTARG('w', width); }
    if (option_html && option_xpm) {
