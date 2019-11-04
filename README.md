@@ -1,5 +1,5 @@
 # cdump
-[![Build Status](https://travis-ci.org/yoheiy/mytest.svg?branch=master)](http://travis-ci.org/yoheiy/cdump)
+[![Build Status](https://travis-ci.org/yoheiy/cdump.svg?branch=master)](http://travis-ci.org/yoheiy/cdump)
 
 `cdump` reads standard input and displays it with colours.
 It always shows one byte with one coloured character.
