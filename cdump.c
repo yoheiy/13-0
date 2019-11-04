@@ -181,7 +181,15 @@ out(const char c)
    const char c7 = c & 0x7f;
    const char c8 = c & 0x80;
 
-if (option_u8 && c8) { class_change(META_PRINTABLE); put('0' + u8width(c)); goto u8; }
+   if (option_u8 && c8) {
+      class_change(META_PRINTABLE);
+
+      unsigned char x = c;
+      if ((x == 0xc0) || (x == 0xc1) || (x > 0xf4))
+         put('X');
+      else
+         put(u8width(c) + '0');
+      goto u8; }
 
    switch (c7) {
    case 0 ... 32:
