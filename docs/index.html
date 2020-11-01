@@ -1,0 +1,74 @@
+<title>cdump example</title>
+<meta name='viewport'
+      content='user-scalable=no, width=device-width'>
+<style>
+.cdump {
+   background-color: black;
+   color: lightgrey
+}
+.ctrl {
+   color: red
+}
+.printable {
+   color: white
+}
+.metactrl {
+   color: lime
+}
+.metaprintable {
+   color: yellow
+}
+</style>
+<h1>cdump example</h1>
+<pre class=cdump><code>$ cdump -w32 &lt;sample.png
+     0  <span class='metactrl'>I</span><span class='printable'>PNG</span><span class='ctrl'>MJZJ@@@M</span><span class='printable'>IHDR</span><span class='ctrl'>@@@H@@@HA@@@@</span><span class='metaprintable'>l</span><span class='printable'>t</span><span class='metactrl'>C</span>
+    20  <span class='printable'>&amp;</span><span class='ctrl'>@@@U</span><span class='printable'>IDAT</span><span class='ctrl'>H</span><span class='metactrl'>Y</span><span class='printable'>c</span><span class='metaprintable'>XO</span><span class='printable'>0</span><span class='metactrl'>_</span><span class='metaprintable'>!</span><span class='metactrl'>_</span><span class='metaprintable'>!</span><span class='ctrl'>]H</span><span class='metaprintable'>{</span><span class='metactrl'>A</span><span class='metaprintable'>,}</span><span class='ctrl'>@</span><span class='printable'>'P</span><span class='ctrl'>D</span><span class='metaprintable'>i</span><span class='printable'>3</span><span class='metaprintable'>&amp;</span>
+    40  <span class='metaprintable'>$</span><span class='printable'>%</span><span class='ctrl'>@@@@</span><span class='printable'>IEND</span><span class='metaprintable'>.</span><span class='printable'>B`</span><span class='metactrl'>B</span>
+$ cdump &lt;sample.pbm
+     0  <span class='printable'>P4</span><span class='ctrl'>.</span><span class='printable'>8</span><span class='ctrl'>.</span><span class='printable'>8</span><span class='ctrl'>.</span><span class='printable'>@`pxxp`@</span>
+$ cdump -w32 &lt;cdump | head -n4
+     0  <span class='ctrl'>?</span><span class='printable'>ELF</span><span class='ctrl'>BAA@@@@@@@@@C@</span><span class='printable'>&gt;</span><span class='ctrl'>@A@@@</span><span class='metactrl'>.</span><span class='ctrl'>P@@@@@@</span>
+    20  <span class='printable'>@</span><span class='ctrl'>@@@@@@@</span><span class='metactrl'>H</span><span class='printable'>=</span><span class='ctrl'>@@@@@@@@@@</span><span class='printable'>@</span><span class='ctrl'>@</span><span class='printable'>8</span><span class='ctrl'>@K@</span><span class='printable'>@</span><span class='ctrl'>@^@]@</span>
+    40  <span class='ctrl'>F@@@D@@@</span><span class='printable'>@</span><span class='ctrl'>@@@@@@@</span><span class='printable'>@</span><span class='ctrl'>@@@@@@@</span><span class='printable'>@</span><span class='ctrl'>@@@@@@@</span>
+    60  <span class='printable'>h</span><span class='ctrl'>B@@@@@@</span><span class='printable'>h</span><span class='ctrl'>B@@@@@@H@@@@@@@C@@@D@@@</span>
+$ cdump -Wlw32 &lt;cdump.c | head -n4
+     1  <span class='printable'>#include</span><span class='ctrl'>.</span><span class='printable'>&lt;stdio.h&gt;</span><span class='ctrl'>J</span><span class='printable'>#include</span><span class='ctrl'>.</span><span class='printable'>&lt;std</span>
+     2  <span class='printable'>lib.h&gt;</span><span class='ctrl'>J</span><span class='printable'>#include</span><span class='ctrl'>.</span><span class='printable'>&lt;unistd.h&gt;</span><span class='ctrl'>JJ</span><span class='printable'>int</span><span class='ctrl'>.</span>
+     5  <span class='printable'>option_debug;</span><span class='ctrl'>J</span><span class='printable'>int</span><span class='ctrl'>.</span><span class='printable'>option_html;</span><span class='ctrl'>J</span><span class='printable'>i</span>
+     7  <span class='printable'>nt</span><span class='ctrl'>.</span><span class='printable'>option_line_number;</span><span class='ctrl'>J</span><span class='printable'>int</span><span class='ctrl'>.</span><span class='printable'>optio</span>
+$ cdump -Wlr &lt;cdump.c | head -n4
+     1  <span class='printable'>#include</span><span class='ctrl'>.</span><span class='printable'>&lt;stdio.h&gt;</span><span class='ctrl'>J</span>
+     2  <span class='printable'>#include</span><span class='ctrl'>.</span><span class='printable'>&lt;stdlib.h&gt;</span><span class='ctrl'>J</span>
+     3  <span class='printable'>#include</span><span class='ctrl'>.</span><span class='printable'>&lt;unistd.h&gt;</span><span class='ctrl'>J</span>
+     4  <span class='ctrl'>J</span>
+$ perl -e 'print chr for(0..0xff)' |
+&gt; cdump -w16
+     0  <span class='ctrl'>@ABCDEFGHIJKLMNO</span>
+    10  <span class='ctrl'>PQRSTUVWXYZ[\]^_</span>
+    20  <span class='ctrl'>.</span><span class='printable'>!"#$%&amp;'()*+,-./</span>
+    30  <span class='printable'>0123456789:;&lt;=&gt;?</span>
+    40  <span class='printable'>@ABCDEFGHIJKLMNO</span>
+    50  <span class='printable'>PQRSTUVWXYZ[\]^_</span>
+    60  <span class='printable'>`abcdefghijklmno</span>
+    70  <span class='printable'>pqrstuvwxyz{|}~</span><span class='ctrl'>?</span>
+    80  <span class='metactrl'>@ABCDEFGHIJKLMNO</span>
+    90  <span class='metactrl'>PQRSTUVWXYZ[\]^_</span>
+    a0  <span class='metactrl'>.</span><span class='metaprintable'>!"#$%&amp;'()*+,-./</span>
+    b0  <span class='metaprintable'>0123456789:;&lt;=&gt;?</span>
+    c0  <span class='metaprintable'>@ABCDEFGHIJKLMNO</span>
+    d0  <span class='metaprintable'>PQRSTUVWXYZ[\]^_</span>
+    e0  <span class='metaprintable'>`abcdefghijklmno</span>
+    f0  <span class='metaprintable'>pqrstuvwxyz{|}~</span><span class='metactrl'>?</span>
+   100  
+$ cdump -x &lt;cdump | ed &gt;cout.xpm
+<a href='cout.xpm'><img src='cout.png' alt='xpm output from cdump'></a>
+</code></pre>
+<h2>legend</h2>
+<ul>
+<li><span class='cdump ctrl'>Red</span>: control characters ;
+<li><span class='cdump printable'>White</span>: printable characters ;
+<li><span class='cdump metactrl'>Green</span>: control characters with meta bit (bit 7) ;
+<li><span class='cdump metaprintable'>Yellow</span>: printable characters with meta bit.
+</ul>
+<h2>src</h2>
+<p>See <a href='https://github.com/yoheiy/cdump'>yoheiy/cdump</a> on GitHub for the source code.
