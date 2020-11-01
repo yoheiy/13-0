@@ -17,4 +17,4 @@ It always shows one byte with one coloured character.
 ## example
 
 See example at
-https://uint.sakura.ne.jp/example/cdump.html
+https://yoheiy.github.io/cdump/
